@@ -1,0 +1,18 @@
+SmartLoot v1.0 by Necroskillz
+=============================
+
+SmartLoot is a unobtrusive group loot frames AddOn for vanilla World of Wacraft v1.12.1.
+
+Features:
+=========
+
+ - Small, compact group loot frames, that u can move anywhere on the screen
+ - Option to autoconfirm rolling on BoP items
+ - Option for each roll to remember it, and roll on the same items automatically next time they drop
+ - Options window with GUI (no slash command shit) to set everything up, including UI to display and edit your remembered rolls
+ 
+Changelog:
+==========
+
+v1.0 - 2013/11/25
+ - initial version

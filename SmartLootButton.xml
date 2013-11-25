@@ -1,0 +1,57 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+	<Frame name="SmartLoot_Minimap" parent="Minimap" enableMouse="true" frameStrata="LOW">
+		<Size>
+			<AbsDimension x="32" y="32"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="Minimap" relativePoint="RIGHT">
+				<Offset>
+					<AbsDimension x="2" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Frames>
+			<Button name="$parent_Button">
+				<Size>
+					<AbsDimension x="32" y="32"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<NormalTexture file="Interface\Addons\SmartLoot\Images\SmartLootMinimapButton-Up"/>
+				<PushedTexture file="Interface\Addons\SmartLoot\Images\SmartLootMinimapButton-Down"/>
+				<HighlightTexture alphaMode="ADD" file="Interface\Minimap\UI-Minimap-ZoomButton-Highlight"/>
+				<Scripts>
+					<OnLoad>
+						this:RegisterForDrag("RightButton");
+						this.dragme = false;
+					</OnLoad>
+					<OnDragStart> 
+						this.dragme = true;
+					</OnDragStart> 
+					<OnDragStop>
+						this.dragme = false;
+					</OnDragStop>
+					<OnUpdate>
+						if(this.dragme == true) then
+							SmartLoot.MinimapButtonBeingDragged();
+						end
+					</OnUpdate>
+					<OnClick>
+						SmartLoot.OnMinimapButtonClick();
+					</OnClick>
+					<OnEnter>
+						SmartLoot.OnMinimapButtonEnter();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+			</Button>
+		</Frames>
+	</Frame>
+</Ui>

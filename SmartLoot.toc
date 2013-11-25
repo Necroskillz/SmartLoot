@@ -1,0 +1,11 @@
+## Interface: 11200
+## Title: SmartLoot
+## Version: 0.1
+## Author: Necros
+## SavedVariables: SmartLoot_Options, SmartLoot_Autoroll
+SmartLoot.lua
+SmartLootButton.lua
+SmartLootOptions.lua
+SmartLoot.xml
+SmartLootButton.xml
+SmartLootOptions.xml

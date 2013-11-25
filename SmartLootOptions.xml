@@ -1,0 +1,655 @@
+ <Ui xmlns="http://www.blizzard.com/wow/ui/"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+	
+	<CheckButton name="AutorollListCheckButtonTemplate" inherits="OptionsCheckButtonTemplate" virtual="true">
+		<HitRectInsets>
+			<AbsInset left="0" right="0" top="0" bottom="0"/>
+		</HitRectInsets>
+		<Size>
+			<AbsDimension x="17" y="17" />
+		</Size>
+		<Scripts>
+			<OnEnter>
+				getglobal(this:GetParent():GetName().."_Highlight"):Show();
+			</OnEnter>
+			<OnLeave>
+				getglobal(this:GetParent():GetName().."_Highlight"):Hide();
+			</OnLeave>
+		</Scripts>
+	</CheckButton>
+	
+	<Frame name="AutorollListItemTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="290" y="18"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parent_Highlight" file="Interface\QuestFrame\UI-QuestTitleHighlight" alphaMode="ADD" setAllPoints="true" hidden="true"/>
+			</Layer>
+			<Texture name="$parentHighlight" file="Interface\QuestFrame\UI-QuestTitleHighlight" alphaMode="ADD" setAllPoints="true" hidden="true"/>
+			<Layer level="ARTWORK">
+				<FontString name="$parent_Text" inherits="GameFontNormal" justifyH="LEFT">
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+							<Offset>
+								<AbsDimension x="17" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Size>
+						<AbsDimension x="180" y="18" />
+					</Size>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parent_X" inherits="UIPanelCloseButton">
+				<Size>
+					<AbsDimension x="18" y="18"/>
+				</Size>
+		            <Anchors>
+		                <Anchor point="LEFT" relativePoint="LEFT">
+		                    <Offset>
+		                        <AbsDimension x="0" y="0"/>
+		                    </Offset>
+		                </Anchor>
+		            </Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.AutorollListRemove(this:GetParent());
+					</OnClick>
+					<OnEnter>
+						getglobal(this:GetParent():GetName().."_Highlight"):Show();
+					</OnEnter>
+					<OnLeave>
+						getglobal(this:GetParent():GetName().."_Highlight"):Hide();
+					</OnLeave>
+				</Scripts>
+			</Button>
+			<CheckButton name="$parent_Pass" inherits="AutorollListCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parent" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="-10" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetAutoroll(this:GetParent(), SmartLoot.Roll.Pass);
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("P");
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_Greed" inherits="AutorollListCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parent" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="-35" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetAutoroll(this:GetParent(), SmartLoot.Roll.Greed);
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("G");
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_Need" inherits="AutorollListCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parent" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="-60" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetAutoroll(this:GetParent(), SmartLoot.Roll.Need);
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText("N");
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+		</Frames>
+		<Scripts>
+			<OnEnter>
+				getglobal(this:GetName().."_Highlight"):Show();
+			</OnEnter>
+			<OnLeave>
+				getglobal(this:GetName().."_Highlight"):Hide();
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	
+	<Frame name="SmartLoot_OptionsFrame" toplevel="true" frameStrata="DIALOG" movable="true" enableMouse="true" hidden="true" parent="UIParent" enableKeyboard="true">
+		<Size>
+			<AbsDimension x="580" y="360"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" title="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+		</Backdrop>
+		
+		<TitleRegion setAllPoints="true" />
+		
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture name="$parentHeader" file="Interface\DialogFrame\UI-DialogBox-Header">
+					<Size>
+						<AbsDimension x="300" y="64"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="0" y="12"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<FontString inherits="GameFontNormal" text="SmartLoot Options">
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="0" y="-2"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parent_X" inherits="UIPanelCloseButton">
+				<Size>
+					<AbsDimension x="32" y="32"/>
+				</Size>
+		            <Anchors>
+		                <Anchor point="CENTER" relativePoint="TOPRIGHT">
+		                    <Offset>
+		                        <AbsDimension x="-24" y="-24"/>
+		                    </Offset>
+		                </Anchor>
+		            </Anchors>
+				<Scripts>
+					<OnClick>
+						this:GetParent():Hide();
+					</OnClick>
+				</Scripts>
+			</Button>
+			<CheckButton name="$parent_ShowAnchor" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-30"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetOption("ShowAnchor", this:GetChecked());
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.ShowAnchor.Label);
+						getglobal(this:GetName()).tooltipText = SmartLoot.Res.ShowAnchor.Tooltip;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_HideDefaultFrames" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-55"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetOption("HideDefaultFrames", this:GetChecked());
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.HideDefaultFrames.Label);
+						getglobal(this:GetName()).tooltipText = SmartLoot.Res.HideDefaultFrames.Tooltip;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_AutoLoot" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-80"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetOption("AutoLoot", this:GetChecked());
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.AutoLoot.Label);
+						getglobal(this:GetName()).tooltipText = SmartLoot.Res.AutoLoot.Tooltip;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_AutoConfirm" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-105"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetOption("AutoConfirm", this:GetChecked());
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.AutoConfirm.Label);
+						getglobal(this:GetName()).tooltipText = SmartLoot.Res.AutoConfirm.Tooltip;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<Frame name="$parent_LootFrameCount">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="25" y="-133"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Size>
+					<AbsDimension x="200" y="18" />
+				</Size>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parent_Label" inherits="GameFontNormal">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+									<Offset>
+										<AbsDimension x="0" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parent_CountText" inherits="GameFontHighlight">
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+									<Offset>
+										<AbsDimension x="130" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<Frame name="$parent_Tooltip">
+						<Size>
+							<AbsDimension x="100" y="15" />
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnEnter>
+								GameTooltip:SetOwner(this, "ANCHOR_TOPRIGHT");
+								GameTooltip:SetText(SmartLoot.Res.LootFrameCount.Tooltip);
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip:Hide();
+							</OnLeave>
+						</Scripts>
+					</Frame>
+					<Button name="$parent_Dec" inherits="UIPanelButtonTemplate" text="-">
+						<Size>
+							<AbsDimension x="15" y="15" />
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="110" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SmartLoot.SetOption("LootFrameCount", SmartLoot_Options.LootFrameCount - 1);
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button name="$parent_Inc" inherits="UIPanelButtonTemplate" text="+">
+						<Size>
+							<AbsDimension x="15" y="15" />
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="145" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SmartLoot.SetOption("LootFrameCount", SmartLoot_Options.LootFrameCount + 1);
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."_Label"):SetText(SmartLoot.Res.LootFrameCount.Label);
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<CheckButton name="$parent_TestLoot" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-155"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.ToggleTestLoot(this:GetChecked());
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.TestLoot.Label);
+						getglobal(this:GetName()).tooltipText = SmartLoot.Res.TestLoot.Tooltip;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_ShowMinimapButton" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-180"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetOption("ShowMinimapButton", this:GetChecked());
+					</OnClick>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.ShowMinimapButton.Label);
+						getglobal(this:GetName()).tooltipText = SmartLoot.Res.ShowMinimapButton.Tooltip;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<Slider name="$parent_MinimapButtonPosition" inherits="OptionsSliderTemplate">
+				<Size>
+					<AbsDimension x="190" y="16"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-225" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.MinimapButtonPosition);
+						getglobal(this:GetName().."High"):SetText("360");
+						getglobal(this:GetName().."Low"):SetText("0");
+						this:SetMinMaxValues(0,360);
+						this:SetValueStep(1);
+					</OnLoad>
+					<OnValueChanged>
+						SmartLoot.SetOption("MinimapButtonPosition", this:GetValue());
+					</OnValueChanged>
+				</Scripts>
+			</Slider>
+			<Frame name="$parent_AutorollListHeader">
+				<Size>
+					<AbsDimension x="290" y="95"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="225" y="-35"/>
+						</Offset>
+					</Anchor>
+				</Anchors>				
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString inherits="GameFontHighlight" text="Autoloot roll options">
+							<Anchors>
+								<Anchor point="TOPLEFT" />
+							</Anchors>
+						</FontString>
+						<FontString name="$parent_QualityLabel" inherits="GameFontNormal" text="Quality:">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="0" y="-25" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parent_NameLabel" inherits="GameFontNormal" text="Name:">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="0" y="-50" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				
+				<Frames>
+					<Button name="$parent_Quality" inherits="UIDropDownMenuTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parent_QualityLabel" relativePoint="RIGHT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Button>
+					 <EditBox name="$parent_Name" inherits="InputBoxTemplate" autoFocus="false">
+						<Size>
+							<AbsDimension x="200" y="20" />
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parent_NameLabel" relativePoint="RIGHT">
+								<Offset>
+									<AbsDimension x="30" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnEnterPressed>
+								SmartLoot.ApplyFilter();
+							</OnEnterPressed>
+						</Scripts>
+					</EditBox>
+					<Button inherits="UIPanelButtonTemplate" text="Filter">
+						<Size>
+							<AbsDimension x="80" y="20" />
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset>
+									<AbsDimension x="0" y="-70" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SmartLoot.ApplyFilter();
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+			<Frame name="$parent_AutorollList">
+				<Size>
+					<AbsDimension x="320" y="190"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent_AutorollListHeader" relativePoint="BOTTOMLEFT" />
+				</Anchors>
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" bgFile="Interface\DialogFrame\UI-DialogBox-Background">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<BackgroundInsets>
+						<AbsInset left="5" right="5" top="5" bottom="5"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parent_Info" inherits="GameFontNormal">
+							<Anchors>
+								<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+									<Offset>
+										<AbsDimension x="5" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<Frame name="$parent_Item1" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+								<Offset>
+									<AbsDimension x="5" y="-5" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<Frame name="$parent_Item2" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Item1" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<Frame name="$parent_Item3" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Item2" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<Frame name="$parent_Item4" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Item3" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<Frame name="$parent_Item5" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Item4" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<Frame name="$parent_Item6" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Item5" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<Frame name="$parent_Item7" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Item6" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<Frame name="$parent_Item8" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Item7" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<Frame name="$parent_Item9" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Item8" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<Frame name="$parent_Item10" inherits="AutorollListItemTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Item9" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="0" />
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					<ScrollFrame name="$parent_ScrollBar" inherits="FauxScrollFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset>
+									<AbsDimension x="0" y="-8"/>
+								</Offset>
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset>
+									<AbsDimension x="-30" y="8"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnVerticalScroll>
+								FauxScrollFrame_OnVerticalScroll(18, SmartLoot.UpdateAutorollListScrollBar); 
+							</OnVerticalScroll>
+						</Scripts>
+					</ScrollFrame>
+				</Frames>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnShow>
+				SmartLoot.PopulateOptionsUI(this);
+			</OnShow>
+			<OnHide>
+				SmartLoot.OnOptionsHide();
+			</OnHide>
+		</Scripts>
+	</Frame>
+</Ui>
