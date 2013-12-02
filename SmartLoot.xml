@@ -214,9 +214,9 @@
 			<AbsDimension x="200" y="30" />
 		</Size>
 		
-		<Anchrors>
-			<Anchor point="CENTER" relativeTo="UIParent" />
-		</Anchrors>
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" />
+		</Anchors>
 		
 		<TitleRegion setAllPoints="true" />
 		

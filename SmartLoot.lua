@@ -228,7 +228,7 @@ end
 function SmartLoot.Initialize()
 
 	tinsert(UISpecialFrames, "SmartLoot_OptionsFrame"); -- enables closing the options frame by pressing Esc
-	
+		
 	SmartLoot.SetAnchorDisplay();
 	SmartLoot.UpdateMinimapButtonPosition();
 	SmartLoot.CreateLootFrames();
