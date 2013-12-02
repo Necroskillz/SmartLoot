@@ -1,4 +1,4 @@
-SmartLoot v1.0 by Necroskillz
+SmartLoot v1.1 by Necroskillz
 =============================
 
 SmartLoot is a unobtrusive group loot frames AddOn for vanilla World of Wacraft v1.12.1.
@@ -13,6 +13,9 @@ Features:
  
 Changelog:
 ==========
+
+v1.1 - 2013/12/2
+ - fixed a bug that was preventing the loot anchor to be displayed
 
 v1.0 - 2013/11/25
  - initial version
