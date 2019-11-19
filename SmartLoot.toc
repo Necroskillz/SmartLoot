@@ -1,4 +1,4 @@
-## Interface: 11200
+## Interface: 11302
 ## Title: SmartLoot
 ## Version: 0.1
 ## Author: Necros

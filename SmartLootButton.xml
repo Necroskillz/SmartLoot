@@ -27,17 +27,17 @@
 				<HighlightTexture alphaMode="ADD" file="Interface\Minimap\UI-Minimap-ZoomButton-Highlight"/>
 				<Scripts>
 					<OnLoad>
-						this:RegisterForDrag("RightButton");
-						this.dragme = false;
+						self:RegisterForDrag("RightButton");
+						self.dragme = false;
 					</OnLoad>
 					<OnDragStart> 
-						this.dragme = true;
+						self.dragme = true;
 					</OnDragStart> 
 					<OnDragStop>
-						this.dragme = false;
+						self.dragme = false;
 					</OnDragStop>
 					<OnUpdate>
-						if(this.dragme == true) then
+						if(self.dragme == true) then
 							SmartLoot.MinimapButtonBeingDragged();
 						end
 					</OnUpdate>
@@ -45,7 +45,7 @@
 						SmartLoot.OnMinimapButtonClick();
 					</OnClick>
 					<OnEnter>
-						SmartLoot.OnMinimapButtonEnter();
+						SmartLoot.OnMinimapButtonEnter(self);
 					</OnEnter>
 					<OnLeave>
 						GameTooltip:Hide();

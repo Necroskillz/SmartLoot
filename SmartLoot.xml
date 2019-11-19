@@ -74,10 +74,10 @@
 				</Layers>
 				<Scripts>
 					<OnEnter>
-						SmartLoot.OnIconEnter(this:GetParent())
+						SmartLoot.OnIconEnter(self:GetParent())
 					</OnEnter>
 					<OnLeave>
-						SmartLoot.OnIconLeave(this:GetParent())
+						SmartLoot.OnIconLeave(self:GetParent())
 					</OnLeave>
 				</Scripts>
 			</Button>
@@ -114,7 +114,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.RollNeed(this:GetParent());
+						SmartLoot.RollNeed(self:GetParent());
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -128,7 +128,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						local parentName = this:GetParent():GetName();
+						local parentName = self:GetParent():GetName();
 						ToggleDropDownMenu(nil, nil, getglobal(parentName.."_AdvancedNeedDropDown"), parentName.."_Need", -45, 5);
 					</OnClick>
 				</Scripts>
@@ -143,7 +143,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.RollGreed(this:GetParent());
+						SmartLoot.RollGreed(self:GetParent());
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -157,7 +157,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						local parentName = this:GetParent():GetName();
+						local parentName = self:GetParent():GetName();
 						ToggleDropDownMenu(nil, nil, getglobal(parentName.."_AdvancedGreedDropDown"), parentName.."_Need", -45, 5);
 					</OnClick>
 				</Scripts>
@@ -172,7 +172,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.Pass(this:GetParent());
+						SmartLoot.Pass(self:GetParent());
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -186,7 +186,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						local parentName = this:GetParent():GetName();
+						local parentName = self:GetParent():GetName();
 						ToggleDropDownMenu(nil, nil, getglobal(parentName.."_AdvancedPassDropDown"), parentName.."_Need", -45, 5);
 					</OnClick>
 				</Scripts>
@@ -202,16 +202,16 @@
 				<BarColor r="1.0" g="0.7" b="0.0"/>
 				<Scripts>
 					<OnUpdate>
-						SmartLoot.OnTimeoutBarUpdate(this:GetParent());
+						SmartLoot.OnTimeoutBarUpdate(self:GetParent());
 					</OnUpdate>
 				</Scripts>
 			</StatusBar>
 		</Frames>
 	</Frame>
 
-	<Frame name="SmartLoot_LootFrame" frameStrata="HIGH" enableMouse="true" movable="true" parent="UIParent">
+	<Frame name="SmartLoot_LootFrame" frameStrata="HIGH" enableMouse="false" movable="true" parent="UIParent">
 		<Size>
-			<AbsDimension x="200" y="30" />
+			<AbsDimension x="50" y="70" />
 		</Size>
 		
 		<Anchors>
@@ -220,7 +220,7 @@
 		
 		<TitleRegion setAllPoints="true" />
 		
-		<Layers>
+		<!--<Layers>
 			<Layer level="ARTWORK">
 				<FontString inherits="GameFontHighlight" text="SmartLoot Anchor" justifyH="Center">
 					<Size>
@@ -232,21 +232,74 @@
 					</Anchors>
 				</FontString>
 			</Layer>
-		</Layers>
+		</Layers> 
 				
 		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background">
 			<BackgroundInsets>
 				<AbsInset top="12"/>
 			</BackgroundInsets>
-		</Backdrop>
+		</Backdrop>-->
+
+		<Frames>
+			<Frame name="SmartLoot_LootFrame_Anchor" frameStrata="HIGH" enableMouse="true" movable="true" parent="UIParent">
+				<Size>
+					<AbsDimension x="200" y="30" />
+				</Size>
+
+				<Anchors>
+					<Anchor point="CENTER" relativeTo="SmartLoot_LootFrame" relativePoint="CENTER" />
+				</Anchors>
+
+				<TitleRegion setAllPoints="true" />
+
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString inherits="GameFontHighlight" text="SmartLoot Anchor" justifyH="Center">
+							<Size>
+								<AbsDimension x="200" y="20" />
+							</Size>
+
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+
+				<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background">
+					<BackgroundInsets>
+						<AbsInset top="12"/>
+					</BackgroundInsets>
+				</Backdrop>
+
+				<Scripts>
+					<OnLoad>
+						self:RegisterForDrag("LeftButton")
+					</OnLoad>
+					<OnDragStart>
+					 	SmartLoot_LootFrame:StartMoving()
+					</OnDragStart>
+					<OnDragStop>
+						SmartLoot_LootFrame:StopMovingOrSizing()
+					</OnDragStop>
+				</Scripts>
+			</Frame>
+		</Frames>
 						
 		<Scripts>
 			<OnLoad>
-				SmartLoot.OnLoad(this)
+				SmartLoot.OnLoad(self)
+				<!-- self:RegisterForDrag("LeftButton") -->
 			</OnLoad>
+			<OnDragStart>
+			 	self:StartMoving()
+			</OnDragStart>
 			<OnEvent>
-				SmartLoot.OnEvent(event)
+				SmartLoot.OnEvent(self, event, ...)
 			</OnEvent>
+			<!-- <OnDragStop>
+				self:StopMovingOrSizing()
+			</OnDragStop> -->
 		</Scripts>
 	</Frame>
 </Ui>

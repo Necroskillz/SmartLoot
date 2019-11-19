@@ -62,7 +62,8 @@ function SmartLoot.OnLoad(self)
 	self:RegisterEvent("CANCEL_LOOT_ROLL");
 end
 
-function SmartLoot.OnEvent(event)
+function SmartLoot.OnEvent(self, event, ...)
+	local arg1, arg2 = ...
 	if(event == "START_LOOT_ROLL") then		
 		if(SmartLoot_Options.HideDefaultFrames) then
 			SmartLoot.ToggleDefaultFrames(false);
@@ -87,6 +88,7 @@ function SmartLoot.OnEvent(event)
 			StaticPopup_Hide("CONFIRM_LOOT_ROLL", arg1);
 		end
 	elseif(event == "ADDON_LOADED" and arg1 == "SmartLoot") then
+		self:UnregisterEvent("ADDON_LOADED");
 		SmartLoot.EnsureOptions();
 		SmartLoot.Initialize();
 	end
@@ -114,9 +116,9 @@ end
 
 function SmartLoot.SetAnchorDisplay()
 	if(SmartLoot_Options.ShowAnchor) then
-		SmartLoot_LootFrame:Show();
+		SmartLoot_LootFrame_Anchor:Show();
 	else
-		SmartLoot_LootFrame:Hide();
+		SmartLoot_LootFrame_Anchor:Hide();
 	end
 end
 
@@ -174,20 +176,20 @@ function SmartLoot.CreateLootFrames()
 	end
 end
 
-function SmartLoot.InitializeNeedDropDown()
-	local lootFrame = this:GetParent();
+function SmartLoot.InitializeNeedDropDown(self)
+	local lootFrame = self:GetParent();
 	
 	SmartLoot.AddAutoLootButton(SmartLoot.Roll.Need, "Need", lootFrame.loot);
 end
 
-function SmartLoot.InitializeGreedDropDown()
-	local lootFrame = this:GetParent();
+function SmartLoot.InitializeGreedDropDown(self)
+	local lootFrame = self:GetParent();
 	
 	SmartLoot.AddAutoLootButton(SmartLoot.Roll.Greed, "Greed", lootFrame.loot);
 end
 
-function SmartLoot.InitializePassDropDown()
-	local lootFrame = this:GetParent();
+function SmartLoot.InitializePassDropDown(self)
+	local lootFrame = self:GetParent();
 	
 	SmartLoot.AddAutoLootButton(SmartLoot.Roll.Pass, "Pass", lootFrame.loot);
 end
@@ -203,9 +205,9 @@ function SmartLoot.AddAutoLootButton(rollId, rollName, loot)
 	});
 end
 
-function SmartLoot.AddAutoLoot()
-	local roll = this.arg1.roll;
-	local loot = this.arg1.loot;
+function SmartLoot.AddAutoLoot(self)
+	local roll = self.arg1.roll;
+	local loot = self.arg1.loot;
 	
 	SmartLoot_Autoroll[loot.name] = {
 		quality = loot.quality;
@@ -233,6 +235,7 @@ function SmartLoot.Initialize()
 	SmartLoot.UpdateMinimapButtonPosition();
 	SmartLoot.CreateLootFrames();
 	SmartLoot.Print("loaded. v"..SmartLoot.Version.." by Necroskillz. Use /sloot or minimap button to open options.");
+	print("initialize")
 	
 end
 
@@ -327,7 +330,7 @@ function SmartLoot.Pass(self)
 end
 
 function SmartLoot.OnIconEnter(self)
-	GameTooltip:SetOwner(this, "ANCHOR_RIGHT", -(this:GetWidth()), 0);
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -(self:GetWidth()), 0);
 	GameTooltip:SetLootRollItem(self.loot.rollId);
 	GameTooltip:Show();
 end
@@ -342,17 +345,17 @@ function SmartLoot.ToggleTestLoot(show)
 			SmartLoot.QueueLoot(-1, 60000, "Interface\\Icons\\INV_Helmet_51", "Crimson Felt Hat", 3);
 		end
 	else
-		local removeTable = {};
-		
+		--local removeTable = {};
 		for i, loot in ipairs(SmartLoot.Queue) do
 			if(loot.rollId == -1) then
-				table.insert(removeTable, i);
+				SmartLoot.Queue[i] = nil -- preveous solution did not work. There was always one test loot not removed. This seems to work.
+				--table.insert(removeTable, i);
 			end
 		end
 		
-		for i, id in ipairs(removeTable) do
-			table.remove(SmartLoot.Queue, id);
-		end
+		-- for i, id in ipairs(removeTable) do
+		-- 	table.remove(SmartLoot.Queue, id);
+		-- end
 		
 		SmartLoot.ProcessQueue();
 	end
