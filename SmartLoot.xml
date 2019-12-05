@@ -45,7 +45,7 @@
 		</HighlightTexture>
 	</Button>
 
-	<Frame name="SmartLoot_RollTemplate" frameStrata="HIGH" virtual="true" parent="SmartLoot_LootFrame">
+	<Frame name="SmartLoot_RollTemplate" frameStrata="HIGH" virtual="true" parent="UIParent">
 		<Size>
 			<AbsDimension x="220" y="40"/>
 		</Size>
@@ -209,97 +209,47 @@
 		</Frames>
 	</Frame>
 
-	<Frame name="SmartLoot_LootFrame" frameStrata="HIGH" enableMouse="false" movable="true" parent="UIParent">
+	<Frame name="SmartLoot_LootFrame_Anchor" frameStrata="HIGH" enableMouse="true" movable="true" parent="UIParent">
 		<Size>
-			<AbsDimension x="50" y="70" />
+			<AbsDimension x="200" y="20" />
 		</Size>
-		
+  
 		<Anchors>
 			<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" />
 		</Anchors>
-		
+  
 		<TitleRegion setAllPoints="true" />
-		
-		<!--<Layers>
+  
+		<Layers>
 			<Layer level="ARTWORK">
 				<FontString inherits="GameFontHighlight" text="SmartLoot Anchor" justifyH="Center">
 					<Size>
 						<AbsDimension x="200" y="20" />
 					</Size>
-					
+  
 					<Anchors>
 						<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT" />
 					</Anchors>
 				</FontString>
 			</Layer>
-		</Layers> 
-				
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background">
-			<BackgroundInsets>
-				<AbsInset top="12"/>
-			</BackgroundInsets>
-		</Backdrop>-->
-
-		<Frames>
-			<Frame name="SmartLoot_LootFrame_Anchor" frameStrata="HIGH" enableMouse="true" movable="true" parent="UIParent">
-				<Size>
-					<AbsDimension x="200" y="30" />
-				</Size>
-
-				<Anchors>
-					<Anchor point="CENTER" relativeTo="SmartLoot_LootFrame" relativePoint="CENTER" />
-				</Anchors>
-
-				<TitleRegion setAllPoints="true" />
-
-				<Layers>
-					<Layer level="ARTWORK">
-						<FontString inherits="GameFontHighlight" text="SmartLoot Anchor" justifyH="Center">
-							<Size>
-								<AbsDimension x="200" y="20" />
-							</Size>
-
-							<Anchors>
-								<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT" />
-							</Anchors>
-						</FontString>
-					</Layer>
-				</Layers>
-
-				<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background">
-					<BackgroundInsets>
-						<AbsInset top="12"/>
-					</BackgroundInsets>
-				</Backdrop>
-
-				<Scripts>
-					<OnLoad>
-						self:RegisterForDrag("LeftButton")
-					</OnLoad>
-					<OnDragStart>
-					 	SmartLoot_LootFrame:StartMoving()
-					</OnDragStart>
-					<OnDragStop>
-						SmartLoot_LootFrame:StopMovingOrSizing()
-					</OnDragStop>
-				</Scripts>
-			</Frame>
-		</Frames>
-						
+		</Layers>
+  
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"/>
+    
 		<Scripts>
 			<OnLoad>
 				SmartLoot.OnLoad(self)
-				<!-- self:RegisterForDrag("LeftButton") -->
+				self:RegisterForDrag("LeftButton")
 			</OnLoad>
 			<OnDragStart>
 			 	self:StartMoving()
 			</OnDragStart>
+			<OnDragStop>
+				self:StopMovingOrSizing()
+			</OnDragStop>
 			<OnEvent>
 				SmartLoot.OnEvent(self, event, ...)
 			</OnEvent>
-			<!-- <OnDragStop>
-				self:StopMovingOrSizing()
-			</OnDragStop> -->
 		</Scripts>
-	</Frame>
+  </Frame>
 </Ui>
