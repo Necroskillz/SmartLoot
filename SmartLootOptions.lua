@@ -11,6 +11,7 @@
 	setCheckbox("HideDefaultFrames");
 	setCheckbox("AutoLoot");
 	setCheckbox("AutoConfirm");
+	setCheckbox("AutoConfirmAll");
 	setCheckbox("ShowMinimapButton")
 	
 	SmartLoot_OptionsFrame_LootFrameCount_CountText:SetText(SmartLoot_Options.LootFrameCount);

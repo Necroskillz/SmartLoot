@@ -256,6 +256,8 @@
 				<Scripts>
 					<OnClick>
 						SmartLoot.SetOption("AutoConfirm", self:GetChecked());
+						SmartLoot.SetOption("AutoConfirmAll", false);
+						SmartLoot_OptionsFrame_AutoConfirmAll:SetChecked(false);
 					</OnClick>
 					<OnLoad>
 						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.AutoConfirm.Label);
@@ -263,11 +265,31 @@
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
+			<CheckButton name="$parent_AutoConfirmAll" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-130"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetOption("AutoConfirmAll", self:GetChecked());
+						SmartLoot.SetOption("AutoConfirm", false);
+						SmartLoot_OptionsFrame_AutoConfirm:SetChecked(false);
+					</OnClick>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.AutoConfirmAll.Label);
+						getglobal(self:GetName()).tooltipText = SmartLoot.Res.AutoConfirmAll.Tooltip;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
 			<Frame name="$parent_LootFrameCount">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="25" y="-133"/>
+							<AbsDimension x="25" y="-163"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -361,7 +383,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="20" y="-155"/>
+							<AbsDimension x="20" y="-185"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -379,7 +401,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="20" y="-180"/>
+							<AbsDimension x="20" y="-210"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -400,7 +422,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="20" y="-225" />
+							<AbsDimension x="20" y="-255" />
 						</Offset>
 					</Anchor>
 				</Anchors>

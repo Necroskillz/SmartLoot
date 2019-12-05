@@ -30,8 +30,12 @@ SmartLoot.Res = {
 		Tooltip = "Automatically roll on loot using defined loot rules.";
 	};
 	AutoConfirm = {
-		Label = "Autoconfirm rolls";
-		Tooltip = "Automatically confim rolling on BoP items.";
+		Label = "Autoconfirm Autoloot rolls";
+		Tooltip = "Automatically confim rolling on BoP items If they have a defined loot rule.";
+	};
+	AutoConfirmAll = {
+		Label = "Autoconfirm all rolls";
+		Tooltip = "Automatically confim rolling on ALL BoP items.";
 	};
 	LootFrameCount = {
 		Label = "Loot frame count";
@@ -83,7 +87,14 @@ function SmartLoot.OnEvent(self, event, ...)
 		-- fires after rolling or passing on an item
 		SmartLoot.ClearLoot(arg1);
 	elseif(event == "CONFIRM_LOOT_ROLL") then
-		if(SmartLoot_Options.AutoConfirm) then
+		local _, name = GetLootRollItemInfo(rollId);
+		print("Event: CONFIRM_LOOT_ROLL, Item:", name)
+		print(SmartLoot_Autoroll[GetLootRollItemInfo(name)])
+		if SmartLoot_Options.AutoConfirmAll then print("SmartLoot_Options.AutoConfirmAll is true") end
+		if SmartLoot_Autoroll[name] then print("SmartLoot_Autoroll[" .. name .. "] is true") end
+		if SmartLoot_Options.AutoConfirm then print("SmartLoot_Options.AutoConfirm is true") end
+		if(SmartLoot_Options.AutoConfirmAll or (SmartLoot_Autoroll[name] and SmartLoot_Options.AutoConfirm)) then
+			print("AutoConfirming for Item", name)
 			ConfirmLootRoll(arg1, arg2);
 			StaticPopup_Hide("CONFIRM_LOOT_ROLL", arg1);
 		end
@@ -109,6 +120,7 @@ function SmartLoot.EnsureOptions()
 	set("HideDefaultFrames", true);
 	set("AutoLoot", true);
 	set("AutoConfirm", true);
+	set("AutoConfirmAll", false);
 	set("LootFrameCount", 4);
 	set("MinimapButtonPosition", 281);
 	set("ShowMinimapButton", true);
