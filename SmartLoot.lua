@@ -170,7 +170,7 @@ function SmartLoot.CreateLootFrames()
 			local frameName = "SmartLoot_Loot"..id;
 			frame = CreateFrame("Frame", frameName, UIParent, "SmartLoot_RollTemplate");
 			frame:Hide();
-			frame:SetPoint("TOP", SmartLoot_LootFrame, "BOTTOM", 0, (id - 1) * -40 - (id - 1) * 2)
+			frame:SetPoint("TOP", SmartLoot_LootFrame_Anchor, "BOTTOM", 0, (id - 1) * -40 - (id - 1) * 2)
 			frame.loot = nil;
 			
 			local needDropDown = CreateFrame("Frame", frameName.."_AdvancedNeedDropDown", frame);
