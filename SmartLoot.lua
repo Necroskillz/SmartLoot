@@ -67,11 +67,10 @@ function SmartLoot.OnLoad(self)
 end
 
 function SmartLoot.OnEvent(self, event, ...)
-	--print("Event:", event)
 	local arg1, arg2, arg3, arg4 = ...	
 	local rollId = arg1;
 	local timeout = arg2;	
-	--print("rollId:", arg1, "timeout:", arg2, "arg3:", arg3, "arg4:", arg4)
+
 	if(event == "START_LOOT_ROLL") then		
 		if(SmartLoot_Options.HideDefaultFrames) then
 			SmartLoot.ToggleDefaultFrames(false);
@@ -84,23 +83,22 @@ function SmartLoot.OnEvent(self, event, ...)
 		else
 			SmartLoot.QueueLoot(rollId, timeout, texture, name, quality);
 		end
+
 	elseif(event == "CANCEL_LOOT_ROLL") then
 		-- fires after rolling or passing on an item
 		SmartLoot.ClearLoot(arg1);
+
 	elseif(event == "CONFIRM_LOOT_ROLL") then
 		local _, name = GetLootRollItemInfo(rollId);
-		--print("Event: CONFIRM_LOOT_ROLL, Item:", name)
-		--print(SmartLoot_Autoroll[GetLootRollItemInfo(name)])
 		if SmartLoot_Options.AutoConfirmAll then print("SmartLoot_Options.AutoConfirmAll is true") end
 		if SmartLoot_Autoroll[name] then print("SmartLoot_Autoroll[" .. name .. "] is true") end
 		if SmartLoot_Options.AutoConfirm then print("SmartLoot_Options.AutoConfirm is true") end
-		--print("SmartLoot_Options.AutoConfirm:", SmartLoot_Options.AutoConfirm)
-		--print("")
 		if(SmartLoot_Options.AutoConfirmAll or (SmartLoot_Autoroll[name] and SmartLoot_Options.AutoConfirm)) then
 			print("AutoConfirming for Item", name)
 			ConfirmLootRoll(arg1, arg2);
 			StaticPopup_Hide("CONFIRM_LOOT_ROLL", arg1);
 		end
+		
 	elseif(event == "ADDON_LOADED" and arg1 == "SmartLoot") then
 		self:UnregisterEvent("ADDON_LOADED");
 		SmartLoot.EnsureOptions();
