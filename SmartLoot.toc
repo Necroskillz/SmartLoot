@@ -2,7 +2,7 @@
 ## Title: SmartLoot
 ## Version: 0.1
 ## Author: Necros
-## SavedVariables: SmartLoot_Options, SmartLoot_Autoroll
+## SavedVariablesPerCharacter: SmartLoot_Options, SmartLoot_Autoroll
 SmartLoot.lua
 SmartLootButton.lua
 SmartLootOptions.lua
