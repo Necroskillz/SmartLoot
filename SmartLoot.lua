@@ -90,11 +90,7 @@ function SmartLoot.OnEvent(self, event, ...)
 
 	elseif(event == "CONFIRM_LOOT_ROLL") then
 		local _, name = GetLootRollItemInfo(rollId);
-		if SmartLoot_Options.AutoConfirmAll then print("SmartLoot_Options.AutoConfirmAll is true") end
-		if SmartLoot_Autoroll[name] then print("SmartLoot_Autoroll[" .. name .. "] is true") end
-		if SmartLoot_Options.AutoConfirm then print("SmartLoot_Options.AutoConfirm is true") end
 		if(SmartLoot_Options.AutoConfirmAll or (SmartLoot_Autoroll[name] and SmartLoot_Options.AutoConfirm)) then
-			print("AutoConfirming for Item", name)
 			ConfirmLootRoll(arg1, arg2);
 			StaticPopup_Hide("CONFIRM_LOOT_ROLL", arg1);
 		end
@@ -248,7 +244,6 @@ function SmartLoot.Initialize()
 	SmartLoot.UpdateMinimapButtonPosition();
 	SmartLoot.CreateLootFrames();
 	SmartLoot.Print("loaded. v"..SmartLoot.Version.." by Necroskillz. Use /sloot or minimap button to open options.");
-	print("initialize")
 	
 end
 
