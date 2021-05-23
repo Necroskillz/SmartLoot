@@ -1,7 +1,5 @@
 SmartLoot = {};
 
-SmartLoot.Version = "1.1";
-
 SmartLoot.Roll = {
 	Pass = 0;
 	Need = 1;
@@ -51,6 +49,37 @@ SmartLoot.Res = {
 	};
 	MinimapButtonPosition = "Minimap button position";
 }
+
+SmartLoot_BACKDROP = {
+	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",	
+	edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+	tile = true,
+	tileEdge = true,
+	tileSize = 32,
+	edgeSize = 32,
+	insets = { left = 11, right = 12, top = 12, bottom = 11 }
+};
+
+SmartLoot_BACKDROP_SIMPLE = {
+	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+};
+
+SmartLoot_AUTOROLLLIST = {
+	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",	
+	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+	tile = true,
+	tileEdge = true,
+	tileSize = 32,
+	edgeSize = 16,
+	insets = { left = 5, right = 5, top = 5, bottom = 5 }
+};
+
+SmartLoot_SLIDER = {
+	bgFile = "Interface\\Buttons\\UI-SliderBar-Background",
+	edgeFile = "Interface\\Buttons\\UI-SliderBar-Border",
+	tile = true, tileSize = 8, edgeSize = 8,
+	insets = { left = 3, right = 3, top = 3, bottom = 3 }
+};
 
 function SmartLoot.OnLoad(self)
 		
@@ -243,7 +272,6 @@ function SmartLoot.Initialize()
 	SmartLoot.SetAnchorDisplay();
 	SmartLoot.UpdateMinimapButtonPosition();
 	SmartLoot.CreateLootFrames();
-	SmartLoot.Print("loaded. v"..SmartLoot.Version.." by Necroskillz. Use /sloot or minimap button to open options.");
 	
 end
 

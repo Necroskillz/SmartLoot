@@ -127,24 +127,16 @@
 		</Scripts>
 	</Frame>
 	
-	<Frame name="SmartLoot_OptionsFrame" toplevel="true" frameStrata="DIALOG" movable="true" enableMouse="true" hidden="true" parent="UIParent" enableKeyboard="true">
+	<Frame name="SmartLoot_OptionsFrame" toplevel="true" frameStrata="DIALOG" movable="true" enableMouse="true" hidden="true" parent="UIParent" enableKeyboard="true" inherits="BackdropTemplate">
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SmartLoot_BACKDROP" type="global" />
+		</KeyValues>
 		<Size>
 			<AbsDimension x="580" y="360"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" title="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
 		
 		<TitleRegion setAllPoints="true" />
 		
@@ -415,7 +407,10 @@
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<Slider name="$parent_MinimapButtonPosition" inherits="OptionsSliderTemplate">
+			<Slider name="$parent_MinimapButtonPosition" inherits="OptionsSliderTemplate, BackdropTemplate">
+				<KeyValues>
+					<KeyValue key="backdropInfo" value="SmartLoot_SLIDER" type="global" />
+				</KeyValues>
 				<Size>
 					<AbsDimension x="190" y="16"/>
 				</Size>
@@ -427,7 +422,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLoad>
+					<OnLoad inherit="prepend">
 						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.MinimapButtonPosition);
 						getglobal(self:GetName().."High"):SetText("360");
 						getglobal(self:GetName().."Low"):SetText("0");
@@ -524,13 +519,21 @@
 					</Button>
 				</Frames>
 			</Frame>
-			<Frame name="$parent_AutorollList">
+			<Frame name="$parent_AutorollList" inherits="BackdropTemplate">
+				<KeyValues>
+					<KeyValue key="backdropInfo" value="SmartLoot_AUTOROLLLIST" type="global" />
+				</KeyValues>
 				<Size>
 					<AbsDimension x="320" y="190"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent_AutorollListHeader" relativePoint="BOTTOMLEFT" />
 				</Anchors>
+    			<Scripts>
+    			  <OnLoad inherit="prepend">
+				  	self:OnBackdropLoaded()
+    			  </OnLoad>
+    			</Scripts>
 				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" bgFile="Interface\DialogFrame\UI-DialogBox-Background">
 					<EdgeSize>
 						<AbsValue val="16"/>
@@ -666,7 +669,7 @@
 			</Frame>
 		</Frames>
 		<Scripts>
-		 	<OnLoad>
+		 	<OnLoad inherit="prepend">
 			 	self:RegisterForDrag("LeftButton")
 			</OnLoad>
 			<OnShow>

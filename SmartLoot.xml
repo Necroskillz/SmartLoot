@@ -45,12 +45,13 @@
 		</HighlightTexture>
 	</Button>
 
-	<Frame name="SmartLoot_RollTemplate" frameStrata="HIGH" virtual="true" parent="UIParent">
+	<Frame name="SmartLoot_RollTemplate" frameStrata="HIGH" virtual="true" parent="UIParent" inherits="BackdropTemplate">
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SmartLoot_BACKDROP_SIMPLE" type="global" />
+		</KeyValues>
 		<Size>
 			<AbsDimension x="220" y="40"/>
 		</Size>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background">
-		</Backdrop>
 		<Frames>
 			<Button name="$parent_Icon">
 				<Size>
@@ -209,10 +210,19 @@
 		</Frames>
 	</Frame>
 
-	<Frame name="SmartLoot_LootFrame_Anchor" frameStrata="HIGH" enableMouse="true" movable="true" parent="UIParent">
+	<Frame name="SmartLoot_LootFrame_Anchor" frameStrata="HIGH" enableMouse="true" movable="true" parent="UIParent" inherits="BackdropTemplate">
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SmartLoot_BACKDROP_SIMPLE" type="global" />
+		</KeyValues>
 		<Size>
 			<AbsDimension x="200" y="20" />
 		</Size>
+		
+		<Scripts>
+			<OnLoad inherit="prepend">
+				self:OnBackdropLoaded()
+			</OnLoad>
+		</Scripts>
   
 		<Anchors>
 			<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" />
@@ -233,11 +243,9 @@
 				</FontString>
 			</Layer>
 		</Layers>
-  
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"/>
-    
+      
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherit="prepend">
 				SmartLoot.OnLoad(self)
 				self:RegisterForDrag("LeftButton")
 			</OnLoad>
