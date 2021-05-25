@@ -1,7 +1,5 @@
 SmartLoot = {};
 
-SmartLoot.Version = "1.1";
-
 SmartLoot.Roll = {
 	Pass = 0;
 	Need = 1;
@@ -30,8 +28,12 @@ SmartLoot.Res = {
 		Tooltip = "Automatically roll on loot using defined loot rules.";
 	};
 	AutoConfirm = {
-		Label = "Autoconfirm rolls";
-		Tooltip = "Automatically confim rolling on BoP items.";
+		Label = "Autoconfirm Autoloot rolls";
+		Tooltip = "Automatically confim rolling on BoP items If they have a defined loot rule.";
+	};
+	AutoConfirmAll = {
+		Label = "Autoconfirm all rolls";
+		Tooltip = "Automatically confim rolling on ALL BoP items.";
 	};
 	LootFrameCount = {
 		Label = "Loot frame count";
@@ -48,6 +50,37 @@ SmartLoot.Res = {
 	MinimapButtonPosition = "Minimap button position";
 }
 
+SmartLoot_BACKDROP = {
+	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",	
+	edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+	tile = true,
+	tileEdge = true,
+	tileSize = 32,
+	edgeSize = 32,
+	insets = { left = 11, right = 12, top = 12, bottom = 11 }
+};
+
+SmartLoot_BACKDROP_SIMPLE = {
+	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+};
+
+SmartLoot_AUTOROLLLIST = {
+	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",	
+	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+	tile = true,
+	tileEdge = true,
+	tileSize = 32,
+	edgeSize = 16,
+	insets = { left = 5, right = 5, top = 5, bottom = 5 }
+};
+
+SmartLoot_SLIDER = {
+	bgFile = "Interface\\Buttons\\UI-SliderBar-Background",
+	edgeFile = "Interface\\Buttons\\UI-SliderBar-Border",
+	tile = true, tileSize = 8, edgeSize = 8,
+	insets = { left = 3, right = 3, top = 3, bottom = 3 }
+};
+
 function SmartLoot.OnLoad(self)
 		
 	SLASH_SLOOT1 = "/sloot";
@@ -62,15 +95,16 @@ function SmartLoot.OnLoad(self)
 	self:RegisterEvent("CANCEL_LOOT_ROLL");
 end
 
-function SmartLoot.OnEvent(event)
+function SmartLoot.OnEvent(self, event, ...)
+	local arg1, arg2, arg3, arg4 = ...	
+	local rollId = arg1;
+	local timeout = arg2;	
+
 	if(event == "START_LOOT_ROLL") then		
 		if(SmartLoot_Options.HideDefaultFrames) then
 			SmartLoot.ToggleDefaultFrames(false);
 		end
-	
-		local rollId = arg1;
-		local timeout = arg2;
-				
+					
 		local texture, name, count, quality, bindOnPickup = GetLootRollItemInfo(rollId);
 		
 		if(SmartLoot_Options.AutoLoot and SmartLoot_Autoroll[name]) then
@@ -78,15 +112,20 @@ function SmartLoot.OnEvent(event)
 		else
 			SmartLoot.QueueLoot(rollId, timeout, texture, name, quality);
 		end
+
 	elseif(event == "CANCEL_LOOT_ROLL") then
 		-- fires after rolling or passing on an item
 		SmartLoot.ClearLoot(arg1);
+
 	elseif(event == "CONFIRM_LOOT_ROLL") then
-		if(SmartLoot_Options.AutoConfirm) then
+		local _, name = GetLootRollItemInfo(rollId);
+		if(SmartLoot_Options.AutoConfirmAll or (SmartLoot_Autoroll[name] and SmartLoot_Options.AutoConfirm)) then
 			ConfirmLootRoll(arg1, arg2);
 			StaticPopup_Hide("CONFIRM_LOOT_ROLL", arg1);
 		end
+		
 	elseif(event == "ADDON_LOADED" and arg1 == "SmartLoot") then
+		self:UnregisterEvent("ADDON_LOADED");
 		SmartLoot.EnsureOptions();
 		SmartLoot.Initialize();
 	end
@@ -107,6 +146,7 @@ function SmartLoot.EnsureOptions()
 	set("HideDefaultFrames", true);
 	set("AutoLoot", true);
 	set("AutoConfirm", true);
+	set("AutoConfirmAll", false);
 	set("LootFrameCount", 4);
 	set("MinimapButtonPosition", 281);
 	set("ShowMinimapButton", true);
@@ -114,9 +154,9 @@ end
 
 function SmartLoot.SetAnchorDisplay()
 	if(SmartLoot_Options.ShowAnchor) then
-		SmartLoot_LootFrame:Show();
+		SmartLoot_LootFrame_Anchor:Show();
 	else
-		SmartLoot_LootFrame:Hide();
+		SmartLoot_LootFrame_Anchor:Hide();
 	end
 end
 
@@ -156,7 +196,7 @@ function SmartLoot.CreateLootFrames()
 			local frameName = "SmartLoot_Loot"..id;
 			frame = CreateFrame("Frame", frameName, UIParent, "SmartLoot_RollTemplate");
 			frame:Hide();
-			frame:SetPoint("TOP", SmartLoot_LootFrame, "BOTTOM", 0, (id - 1) * -40 - (id - 1) * 2)
+			frame:SetPoint("TOP", SmartLoot_LootFrame_Anchor, "BOTTOM", 0, (id - 1) * -40 - (id - 1) * 2)
 			frame.loot = nil;
 			
 			local needDropDown = CreateFrame("Frame", frameName.."_AdvancedNeedDropDown", frame);
@@ -174,20 +214,20 @@ function SmartLoot.CreateLootFrames()
 	end
 end
 
-function SmartLoot.InitializeNeedDropDown()
-	local lootFrame = this:GetParent();
+function SmartLoot.InitializeNeedDropDown(self)
+	local lootFrame = self:GetParent();
 	
 	SmartLoot.AddAutoLootButton(SmartLoot.Roll.Need, "Need", lootFrame.loot);
 end
 
-function SmartLoot.InitializeGreedDropDown()
-	local lootFrame = this:GetParent();
+function SmartLoot.InitializeGreedDropDown(self)
+	local lootFrame = self:GetParent();
 	
 	SmartLoot.AddAutoLootButton(SmartLoot.Roll.Greed, "Greed", lootFrame.loot);
 end
 
-function SmartLoot.InitializePassDropDown()
-	local lootFrame = this:GetParent();
+function SmartLoot.InitializePassDropDown(self)
+	local lootFrame = self:GetParent();
 	
 	SmartLoot.AddAutoLootButton(SmartLoot.Roll.Pass, "Pass", lootFrame.loot);
 end
@@ -203,9 +243,9 @@ function SmartLoot.AddAutoLootButton(rollId, rollName, loot)
 	});
 end
 
-function SmartLoot.AddAutoLoot()
-	local roll = this.arg1.roll;
-	local loot = this.arg1.loot;
+function SmartLoot.AddAutoLoot(self)
+	local roll = self.arg1.roll;
+	local loot = self.arg1.loot;
 	
 	SmartLoot_Autoroll[loot.name] = {
 		quality = loot.quality;
@@ -232,7 +272,6 @@ function SmartLoot.Initialize()
 	SmartLoot.SetAnchorDisplay();
 	SmartLoot.UpdateMinimapButtonPosition();
 	SmartLoot.CreateLootFrames();
-	SmartLoot.Print("loaded. v"..SmartLoot.Version.." by Necroskillz. Use /sloot or minimap button to open options.");
 	
 end
 
@@ -327,7 +366,7 @@ function SmartLoot.Pass(self)
 end
 
 function SmartLoot.OnIconEnter(self)
-	GameTooltip:SetOwner(this, "ANCHOR_RIGHT", -(this:GetWidth()), 0);
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -(self:GetWidth()), 0);
 	GameTooltip:SetLootRollItem(self.loot.rollId);
 	GameTooltip:Show();
 end
@@ -342,17 +381,17 @@ function SmartLoot.ToggleTestLoot(show)
 			SmartLoot.QueueLoot(-1, 60000, "Interface\\Icons\\INV_Helmet_51", "Crimson Felt Hat", 3);
 		end
 	else
-		local removeTable = {};
-		
+		--local removeTable = {};
 		for i, loot in ipairs(SmartLoot.Queue) do
 			if(loot.rollId == -1) then
-				table.insert(removeTable, i);
+				SmartLoot.Queue[i] = nil -- preveous solution did not work. There was always one test loot not removed. This seems to work.
+				--table.insert(removeTable, i);
 			end
 		end
 		
-		for i, id in ipairs(removeTable) do
-			table.remove(SmartLoot.Queue, id);
-		end
+		-- for i, id in ipairs(removeTable) do
+		-- 	table.remove(SmartLoot.Queue, id);
+		-- end
 		
 		SmartLoot.ProcessQueue();
 	end

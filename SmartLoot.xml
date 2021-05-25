@@ -45,12 +45,13 @@
 		</HighlightTexture>
 	</Button>
 
-	<Frame name="SmartLoot_RollTemplate" frameStrata="HIGH" virtual="true" parent="SmartLoot_LootFrame">
+	<Frame name="SmartLoot_RollTemplate" frameStrata="HIGH" virtual="true" parent="UIParent" inherits="BackdropTemplate">
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SmartLoot_BACKDROP_SIMPLE" type="global" />
+		</KeyValues>
 		<Size>
 			<AbsDimension x="220" y="40"/>
 		</Size>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background">
-		</Backdrop>
 		<Frames>
 			<Button name="$parent_Icon">
 				<Size>
@@ -74,10 +75,10 @@
 				</Layers>
 				<Scripts>
 					<OnEnter>
-						SmartLoot.OnIconEnter(this:GetParent())
+						SmartLoot.OnIconEnter(self:GetParent())
 					</OnEnter>
 					<OnLeave>
-						SmartLoot.OnIconLeave(this:GetParent())
+						SmartLoot.OnIconLeave(self:GetParent())
 					</OnLeave>
 				</Scripts>
 			</Button>
@@ -114,7 +115,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.RollNeed(this:GetParent());
+						SmartLoot.RollNeed(self:GetParent());
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -128,7 +129,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						local parentName = this:GetParent():GetName();
+						local parentName = self:GetParent():GetName();
 						ToggleDropDownMenu(nil, nil, getglobal(parentName.."_AdvancedNeedDropDown"), parentName.."_Need", -45, 5);
 					</OnClick>
 				</Scripts>
@@ -143,7 +144,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.RollGreed(this:GetParent());
+						SmartLoot.RollGreed(self:GetParent());
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -157,7 +158,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						local parentName = this:GetParent():GetName();
+						local parentName = self:GetParent():GetName();
 						ToggleDropDownMenu(nil, nil, getglobal(parentName.."_AdvancedGreedDropDown"), parentName.."_Need", -45, 5);
 					</OnClick>
 				</Scripts>
@@ -172,7 +173,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.Pass(this:GetParent());
+						SmartLoot.Pass(self:GetParent());
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -186,7 +187,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						local parentName = this:GetParent():GetName();
+						local parentName = self:GetParent():GetName();
 						ToggleDropDownMenu(nil, nil, getglobal(parentName.."_AdvancedPassDropDown"), parentName.."_Need", -45, 5);
 					</OnClick>
 				</Scripts>
@@ -202,51 +203,61 @@
 				<BarColor r="1.0" g="0.7" b="0.0"/>
 				<Scripts>
 					<OnUpdate>
-						SmartLoot.OnTimeoutBarUpdate(this:GetParent());
+						SmartLoot.OnTimeoutBarUpdate(self:GetParent());
 					</OnUpdate>
 				</Scripts>
 			</StatusBar>
 		</Frames>
 	</Frame>
 
-	<Frame name="SmartLoot_LootFrame" frameStrata="HIGH" enableMouse="true" movable="true" parent="UIParent">
+	<Frame name="SmartLoot_LootFrame_Anchor" frameStrata="HIGH" enableMouse="true" movable="true" parent="UIParent" inherits="BackdropTemplate">
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SmartLoot_BACKDROP_SIMPLE" type="global" />
+		</KeyValues>
 		<Size>
-			<AbsDimension x="200" y="30" />
+			<AbsDimension x="200" y="20" />
 		</Size>
 		
+		<Scripts>
+			<OnLoad inherit="prepend">
+				self:OnBackdropLoaded()
+			</OnLoad>
+		</Scripts>
+  
 		<Anchors>
 			<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" />
 		</Anchors>
-		
+  
 		<TitleRegion setAllPoints="true" />
-		
+  
 		<Layers>
 			<Layer level="ARTWORK">
 				<FontString inherits="GameFontHighlight" text="SmartLoot Anchor" justifyH="Center">
 					<Size>
 						<AbsDimension x="200" y="20" />
 					</Size>
-					
+  
 					<Anchors>
 						<Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT" />
 					</Anchors>
 				</FontString>
 			</Layer>
 		</Layers>
-				
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background">
-			<BackgroundInsets>
-				<AbsInset top="12"/>
-			</BackgroundInsets>
-		</Backdrop>
-						
+      
 		<Scripts>
-			<OnLoad>
-				SmartLoot.OnLoad(this)
+			<OnLoad inherit="prepend">
+				SmartLoot.OnLoad(self)
+				self:RegisterForDrag("LeftButton")
 			</OnLoad>
+			<OnDragStart>
+			 	self:StartMoving()
+			</OnDragStart>
+			<OnDragStop>
+				self:StopMovingOrSizing()
+			</OnDragStop>
 			<OnEvent>
-				SmartLoot.OnEvent(event)
+				SmartLoot.OnEvent(self, event, ...)
 			</OnEvent>
 		</Scripts>
-	</Frame>
+  </Frame>
 </Ui>

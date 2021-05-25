@@ -1,7 +1,7 @@
 SmartLoot v1.1 by Necroskillz
 =============================
 
-SmartLoot is a unobtrusive group loot frames AddOn for vanilla World of Wacraft v1.12.1.
+SmartLoot is a unobtrusive group loot frames AddOn for Classic World of Wacraft
 
 Features:
 =========
@@ -13,6 +13,14 @@ Features:
  
 Changelog:
 ==========
+
+v1.3 - 2021/05/23
+ - port to The Burning Crusade Classic
+
+v1.2 - 2020/12/4
+ - port to Classic by Sulpitz
+ - saved Variables now per Character
+ - new option Autoconfirm autoloot rolls
 
 v1.1 - 2013/12/2
  - fixed a bug that was preventing the loot anchor to be displayed

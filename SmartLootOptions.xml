@@ -9,10 +9,10 @@
 		</Size>
 		<Scripts>
 			<OnEnter>
-				getglobal(this:GetParent():GetName().."_Highlight"):Show();
+				getglobal(self:GetParent():GetName().."_Highlight"):Show();
 			</OnEnter>
 			<OnLeave>
-				getglobal(this:GetParent():GetName().."_Highlight"):Hide();
+				getglobal(self:GetParent():GetName().."_Highlight"):Hide();
 			</OnLeave>
 		</Scripts>
 	</CheckButton>
@@ -55,13 +55,13 @@
 		            </Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.AutorollListRemove(this:GetParent());
+						SmartLoot.AutorollListRemove(self:GetParent());
 					</OnClick>
 					<OnEnter>
-						getglobal(this:GetParent():GetName().."_Highlight"):Show();
+						getglobal(self:GetParent():GetName().."_Highlight"):Show();
 					</OnEnter>
 					<OnLeave>
-						getglobal(this:GetParent():GetName().."_Highlight"):Hide();
+						getglobal(self:GetParent():GetName().."_Highlight"):Hide();
 					</OnLeave>
 				</Scripts>
 			</Button>
@@ -75,10 +75,10 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.SetAutoroll(this:GetParent(), SmartLoot.Roll.Pass);
+						SmartLoot.SetAutoroll(self:GetParent(), SmartLoot.Roll.Pass);
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText("P");
+						getglobal(self:GetName().."Text"):SetText("P");
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
@@ -92,10 +92,10 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.SetAutoroll(this:GetParent(), SmartLoot.Roll.Greed);
+						SmartLoot.SetAutoroll(self:GetParent(), SmartLoot.Roll.Greed);
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText("G");
+						getglobal(self:GetName().."Text"):SetText("G");
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
@@ -109,42 +109,34 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.SetAutoroll(this:GetParent(), SmartLoot.Roll.Need);
+						SmartLoot.SetAutoroll(self:GetParent(), SmartLoot.Roll.Need);
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText("N");
+						getglobal(self:GetName().."Text"):SetText("N");
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
 		</Frames>
 		<Scripts>
 			<OnEnter>
-				getglobal(this:GetName().."_Highlight"):Show();
+				getglobal(self:GetName().."_Highlight"):Show();
 			</OnEnter>
 			<OnLeave>
-				getglobal(this:GetName().."_Highlight"):Hide();
+				getglobal(self:GetName().."_Highlight"):Hide();
 			</OnLeave>
 		</Scripts>
 	</Frame>
 	
-	<Frame name="SmartLoot_OptionsFrame" toplevel="true" frameStrata="DIALOG" movable="true" enableMouse="true" hidden="true" parent="UIParent" enableKeyboard="true">
+	<Frame name="SmartLoot_OptionsFrame" toplevel="true" frameStrata="DIALOG" movable="true" enableMouse="true" hidden="true" parent="UIParent" enableKeyboard="true" inherits="BackdropTemplate">
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SmartLoot_BACKDROP" type="global" />
+		</KeyValues>
 		<Size>
 			<AbsDimension x="580" y="360"/>
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" title="true">
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11"/>
-			</BackgroundInsets>
-			<TileSize>
-				<AbsValue val="32"/>
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32"/>
-			</EdgeSize>
-		</Backdrop>
 		
 		<TitleRegion setAllPoints="true" />
 		
@@ -187,7 +179,7 @@
 		            </Anchors>
 				<Scripts>
 					<OnClick>
-						this:GetParent():Hide();
+						self:GetParent():Hide();
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -201,11 +193,11 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.SetOption("ShowAnchor", this:GetChecked());
+						SmartLoot.SetOption("ShowAnchor", self:GetChecked());
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.ShowAnchor.Label);
-						getglobal(this:GetName()).tooltipText = SmartLoot.Res.ShowAnchor.Tooltip;
+						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.ShowAnchor.Label);
+						getglobal(self:GetName()).tooltipText = SmartLoot.Res.ShowAnchor.Tooltip;
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
@@ -219,11 +211,11 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.SetOption("HideDefaultFrames", this:GetChecked());
+						SmartLoot.SetOption("HideDefaultFrames", self:GetChecked());
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.HideDefaultFrames.Label);
-						getglobal(this:GetName()).tooltipText = SmartLoot.Res.HideDefaultFrames.Tooltip;
+						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.HideDefaultFrames.Label);
+						getglobal(self:GetName()).tooltipText = SmartLoot.Res.HideDefaultFrames.Tooltip;
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
@@ -237,11 +229,11 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.SetOption("AutoLoot", this:GetChecked());
+						SmartLoot.SetOption("AutoLoot", self:GetChecked());
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.AutoLoot.Label);
-						getglobal(this:GetName()).tooltipText = SmartLoot.Res.AutoLoot.Tooltip;
+						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.AutoLoot.Label);
+						getglobal(self:GetName()).tooltipText = SmartLoot.Res.AutoLoot.Tooltip;
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
@@ -255,11 +247,33 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.SetOption("AutoConfirm", this:GetChecked());
+						SmartLoot.SetOption("AutoConfirm", self:GetChecked());
+						SmartLoot.SetOption("AutoConfirmAll", false);
+						SmartLoot_OptionsFrame_AutoConfirmAll:SetChecked(false);
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.AutoConfirm.Label);
-						getglobal(this:GetName()).tooltipText = SmartLoot.Res.AutoConfirm.Tooltip;
+						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.AutoConfirm.Label);
+						getglobal(self:GetName()).tooltipText = SmartLoot.Res.AutoConfirm.Tooltip;
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_AutoConfirmAll" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="20" y="-130"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SmartLoot.SetOption("AutoConfirmAll", self:GetChecked());
+						SmartLoot.SetOption("AutoConfirm", false);
+						SmartLoot_OptionsFrame_AutoConfirm:SetChecked(false);
+					</OnClick>
+					<OnLoad>
+						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.AutoConfirmAll.Label);
+						getglobal(self:GetName()).tooltipText = SmartLoot.Res.AutoConfirmAll.Tooltip;
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
@@ -267,7 +281,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="25" y="-133"/>
+							<AbsDimension x="25" y="-163"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -307,7 +321,7 @@
 						</Anchors>
 						<Scripts>
 							<OnEnter>
-								GameTooltip:SetOwner(this, "ANCHOR_TOPRIGHT");
+								GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT");
 								GameTooltip:SetText(SmartLoot.Res.LootFrameCount.Tooltip);
 								GameTooltip:Show();
 							</OnEnter>
@@ -353,7 +367,7 @@
 				</Frames>
 				<Scripts>
 					<OnLoad>
-						getglobal(this:GetName().."_Label"):SetText(SmartLoot.Res.LootFrameCount.Label);
+						getglobal(self:GetName().."_Label"):SetText(SmartLoot.Res.LootFrameCount.Label);
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -361,17 +375,17 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="20" y="-155"/>
+							<AbsDimension x="20" y="-185"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.ToggleTestLoot(this:GetChecked());
+						SmartLoot.ToggleTestLoot(self:GetChecked());
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.TestLoot.Label);
-						getglobal(this:GetName()).tooltipText = SmartLoot.Res.TestLoot.Tooltip;
+						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.TestLoot.Label);
+						getglobal(self:GetName()).tooltipText = SmartLoot.Res.TestLoot.Tooltip;
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
@@ -379,41 +393,44 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="20" y="-180"/>
+							<AbsDimension x="20" y="-210"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						SmartLoot.SetOption("ShowMinimapButton", this:GetChecked());
+						SmartLoot.SetOption("ShowMinimapButton", self:GetChecked());
 					</OnClick>
 					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.ShowMinimapButton.Label);
-						getglobal(this:GetName()).tooltipText = SmartLoot.Res.ShowMinimapButton.Tooltip;
+						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.ShowMinimapButton.Label);
+						getglobal(self:GetName()).tooltipText = SmartLoot.Res.ShowMinimapButton.Tooltip;
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<Slider name="$parent_MinimapButtonPosition" inherits="OptionsSliderTemplate">
+			<Slider name="$parent_MinimapButtonPosition" inherits="OptionsSliderTemplate, BackdropTemplate">
+				<KeyValues>
+					<KeyValue key="backdropInfo" value="SmartLoot_SLIDER" type="global" />
+				</KeyValues>
 				<Size>
 					<AbsDimension x="190" y="16"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="20" y="-225" />
+							<AbsDimension x="20" y="-255" />
 						</Offset>
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLoad>
-						getglobal(this:GetName().."Text"):SetText(SmartLoot.Res.MinimapButtonPosition);
-						getglobal(this:GetName().."High"):SetText("360");
-						getglobal(this:GetName().."Low"):SetText("0");
-						this:SetMinMaxValues(0,360);
-						this:SetValueStep(1);
+					<OnLoad inherit="prepend">
+						getglobal(self:GetName().."Text"):SetText(SmartLoot.Res.MinimapButtonPosition);
+						getglobal(self:GetName().."High"):SetText("360");
+						getglobal(self:GetName().."Low"):SetText("0");
+						self:SetMinMaxValues(0,360);
+						self:SetValueStep(1);
 					</OnLoad>
 					<OnValueChanged>
-						SmartLoot.SetOption("MinimapButtonPosition", this:GetValue());
+						SmartLoot.SetOption("MinimapButtonPosition", self:GetValue());
 					</OnValueChanged>
 				</Scripts>
 			</Slider>
@@ -502,13 +519,21 @@
 					</Button>
 				</Frames>
 			</Frame>
-			<Frame name="$parent_AutorollList">
+			<Frame name="$parent_AutorollList" inherits="BackdropTemplate">
+				<KeyValues>
+					<KeyValue key="backdropInfo" value="SmartLoot_AUTOROLLLIST" type="global" />
+				</KeyValues>
 				<Size>
 					<AbsDimension x="320" y="190"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parent_AutorollListHeader" relativePoint="BOTTOMLEFT" />
 				</Anchors>
+    			<Scripts>
+    			  <OnLoad inherit="prepend">
+				  	self:OnBackdropLoaded()
+    			  </OnLoad>
+    			</Scripts>
 				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" bgFile="Interface\DialogFrame\UI-DialogBox-Background">
 					<EdgeSize>
 						<AbsValue val="16"/>
@@ -636,7 +661,7 @@
 						</Anchors>
 						<Scripts>
 							<OnVerticalScroll>
-								FauxScrollFrame_OnVerticalScroll(18, SmartLoot.UpdateAutorollListScrollBar); 
+								FauxScrollFrame_OnVerticalScroll(self, offset, 18, SmartLoot.UpdateAutorollListScrollBar); 
 							</OnVerticalScroll>
 						</Scripts>
 					</ScrollFrame>
@@ -644,12 +669,21 @@
 			</Frame>
 		</Frames>
 		<Scripts>
+		 	<OnLoad inherit="prepend">
+			 	self:RegisterForDrag("LeftButton")
+			</OnLoad>
 			<OnShow>
-				SmartLoot.PopulateOptionsUI(this);
+				SmartLoot.PopulateOptionsUI(self)
 			</OnShow>
 			<OnHide>
-				SmartLoot.OnOptionsHide();
+				SmartLoot.OnOptionsHide()
 			</OnHide>
+			<OnDragStart>
+			 	self:StartMoving()
+			</OnDragStart>
+			<OnDragStop>
+				self:StopMovingOrSizing()
+			</OnDragStop>
 		</Scripts>
 	</Frame>
 </Ui>

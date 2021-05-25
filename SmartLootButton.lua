@@ -37,8 +37,8 @@ function SmartLoot.OnMinimapButtonClick()
 	SmartLoot.ToggleOptions();
 end
 
-function SmartLoot.OnMinimapButtonEnter()
-    GameTooltip:SetOwner(this, "ANCHOR_LEFT");
+function SmartLoot.OnMinimapButtonEnter(self)
+    GameTooltip:SetOwner(self, "ANCHOR_LEFT");
     GameTooltip:SetText(SmartLoot.Res.MinmapTooltip1);
     GameTooltip:AddLine(SmartLoot.Res.MinmapTooltip2);
     GameTooltip:AddLine(SmartLoot.Res.MinmapTooltip3);

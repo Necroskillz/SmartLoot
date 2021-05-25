@@ -11,6 +11,7 @@
 	setCheckbox("HideDefaultFrames");
 	setCheckbox("AutoLoot");
 	setCheckbox("AutoConfirm");
+	setCheckbox("AutoConfirmAll");
 	setCheckbox("ShowMinimapButton")
 	
 	SmartLoot_OptionsFrame_LootFrameCount_CountText:SetText(SmartLoot_Options.LootFrameCount);
@@ -28,7 +29,7 @@
 	
 	UIDropDownMenu_Initialize(qualityDropDown, SmartLoot.LoadQualityDropDown);
 	UIDropDownMenu_SetSelectedID(qualityDropDown, 1);
-	UIDropDownMenu_SetWidth(100, qualityDropDown);
+	UIDropDownMenu_SetWidth(qualityDropDown, 100);
 	
 	SmartLoot_OptionsFrame_AutorollListHeader_Name:SetText("");
 end
@@ -49,9 +50,9 @@ function SmartLoot.LoadQualityDropDown()
 	end
 end
 
-function SmartLoot.SetAutorollQualityFilter()
-	UIDropDownMenu_SetSelectedID(SmartLoot_OptionsFrame_AutorollListHeader_Quality, this:GetID());
-	SmartLoot.AutorollList.QualityFilter = this.arg1;
+function SmartLoot.SetAutorollQualityFilter(self)
+	UIDropDownMenu_SetSelectedID(SmartLoot_OptionsFrame_AutorollListHeader_Quality, self:GetID());
+	SmartLoot.AutorollList.QualityFilter = self.arg1;
 end
 
 function SmartLoot.ApplyFilter()
